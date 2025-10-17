@@ -1,12 +1,25 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated';
+// Extend types for nativewind
+declare module 'react-native' {
+  interface TouchableOpacityProps {
+    className?: string;
+  }
+}
+
+import React, { useRef } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+  interpolate,
+  Extrapolate
+} from 'react-native-reanimated';
+import { PanGestureHandler, State, PanGestureHandlerGestureEvent, PanGestureHandlerStateChangeEvent } from 'react-native-gesture-handler';
 import { useStore } from '../store';
-import { getTheme } from '../utils/theme';
 
 export default function Card3D() {
-  const { theme, cards } = useStore();
-  const currentTheme = getTheme(theme);
+  const { cards } = useStore();
 
   // Sample card data if no cards exist
   const sampleCard = cards.length > 0 ? cards[0] : {
@@ -19,6 +32,10 @@ export default function Card3D() {
   const rotationX = useSharedValue(0);
   const rotationY = useSharedValue(0);
   const scale = useSharedValue(1);
+  const flipRotation = useSharedValue(0);
+  const glowOpacity = useSharedValue(0);
+
+  const isFlipped = useRef(false);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
@@ -29,16 +46,40 @@ export default function Card3D() {
     ],
   }));
 
+  const glowStyle = useAnimatedStyle(() => ({
+    opacity: glowOpacity.value,
+  }));
+
+  const flipStyle = useAnimatedStyle(() => ({
+    transform: [{ rotateY: `${flipRotation.value}deg` }],
+  }));
+
+  const handleGesture = (event: PanGestureHandlerGestureEvent) => {
+    const { translationX, translationY } = event.nativeEvent;
+    rotationY.value = interpolate(translationX, [-100, 100], [-15, 15], Extrapolate.CLAMP);
+    rotationX.value = interpolate(translationY, [-100, 100], [15, -15], Extrapolate.CLAMP);
+  };
+
+  const handleGestureStateChange = (event: PanGestureHandlerStateChangeEvent) => {
+    if (event.nativeEvent.state === State.END) {
+      rotationX.value = withSpring(0, { damping: 15, stiffness: 100 });
+      rotationY.value = withSpring(0, { damping: 15, stiffness: 100 });
+    }
+  };
+
   const handlePressIn = () => {
     scale.value = withTiming(0.95, { duration: 100 });
+    glowOpacity.value = withTiming(0.3, { duration: 200 });
   };
 
   const handlePressOut = () => {
     scale.value = withTiming(1, { duration: 100 });
+    glowOpacity.value = withTiming(0, { duration: 200 });
   };
 
-  const handlePress = () => {
-    rotationX.value = withSpring(rotationX.value === 0 ? 180 : 0);
+  const handleDoubleTap = () => {
+    isFlipped.current = !isFlipped.current;
+    flipRotation.value = withSpring(isFlipped.current ? 180 : 0, { damping: 20, stiffness: 100 });
   };
 
   const formatCardNumber = (number: string) => {
@@ -46,109 +87,90 @@ export default function Card3D() {
   };
 
   return (
-    <TouchableOpacity
-      onPress={handlePress}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      style={styles.container}
-      activeOpacity={0.9}
-    >
-      <Animated.View
-        style={[
-          styles.card,
-          animatedStyle,
-          {
-            backgroundColor: currentTheme.primary,
-            shadowColor: currentTheme.primary,
-            shadowOffset: { width: 0, height: 10 },
-            shadowOpacity: 0.3,
-            shadowRadius: 20,
-            elevation: 15,
-          }
-        ]}
+    <View className="items-center mb-4">
+      <PanGestureHandler
+        onGestureEvent={handleGesture}
+        onHandlerStateChange={handleGestureStateChange}
       >
-        <View style={styles.cardHeader}>
-          <Text style={styles.cardType}>NeoBank</Text>
-          <View style={styles.virtualBadge}>
-            <Text style={styles.virtualBadgeText}>
-              {sampleCard.isVirtual ? 'VIRTUAL' : 'PHYSICAL'}
-            </Text>
-          </View>
-        </View>
+        <Animated.View style={flipStyle}>
+          <TouchableOpacity
+            onPressIn={handlePressIn}
+            onPressOut={handlePressOut}
+            onLongPress={handleDoubleTap}
+            delayLongPress={500}
+            className="active:opacity-90"
+            activeOpacity={0.9}
+          >
+            <Animated.View
+              className="w-72 h-44 bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 dark:from-primary-500 dark:via-primary-600 dark:to-primary-700 rounded-3xl p-6 shadow-2xl relative overflow-hidden"
+              style={animatedStyle}
+            >
+              {/* Glow effect */}
+              <Animated.View
+                className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-3xl"
+                style={glowStyle}
+              />
 
-        <View style={styles.cardNumber}>
-          <Text style={styles.numberText}>{formatCardNumber(sampleCard.number)}</Text>
-        </View>
+              {/* Front of card */}
+              <Animated.View
+                className="absolute inset-0 p-6"
+                style={{
+                  transform: [{ rotateY: '0deg' }],
+                  backfaceVisibility: 'hidden',
+                }}
+              >
+                <View className="flex-row justify-between items-center mb-8">
+                  <Text className="text-white text-xl font-bold">NeoBank</Text>
+                  <View className="bg-white/20 px-3 py-1.5 rounded-xl">
+                    <Text className="text-white text-xs font-medium">
+                      {sampleCard.isVirtual ? 'VIRTUAL' : 'PHYSICAL'}
+                    </Text>
+                  </View>
+                </View>
 
-        <View style={styles.cardFooter}>
-          <View>
-            <Text style={styles.label}>VALID THRU</Text>
-            <Text style={styles.value}>{sampleCard.expiry}</Text>
-          </View>
-          <View>
-            <Text style={styles.label}>CVV</Text>
-            <Text style={styles.value}>{sampleCard.cvv}</Text>
-          </View>
-        </View>
-      </Animated.View>
-    </TouchableOpacity>
+                <View className="mb-4">
+                  <Text className="text-white text-xl font-bold tracking-wider">
+                    {formatCardNumber(sampleCard.number)}
+                  </Text>
+                </View>
+
+                <View className="flex-row justify-between">
+                  <View>
+                    <Text className="text-white/70 text-xs mb-1">VALID THRU</Text>
+                    <Text className="text-white text-sm font-bold">{sampleCard.expiry}</Text>
+                  </View>
+                  <View>
+                    <Text className="text-white/70 text-xs mb-1">CVV</Text>
+                    <Text className="text-white text-sm font-bold">***</Text>
+                  </View>
+                </View>
+              </Animated.View>
+
+              {/* Back of card */}
+              <Animated.View
+                className="absolute inset-0 p-6 bg-gradient-to-br from-gray-800 to-black rounded-3xl"
+                style={{
+                  transform: [{ rotateY: '180deg' }],
+                  backfaceVisibility: 'hidden',
+                }}
+              >
+                <View className="bg-black rounded-xl p-4 mt-8">
+                  <Text className="text-white text-xs font-bold mb-2">SECURITY CODE</Text>
+                  <View className="bg-white h-8 rounded flex-row items-center px-2">
+                    <Text className="text-black text-sm font-mono">{sampleCard.cvv}</Text>
+                  </View>
+                  <Text className="text-white/70 text-xs mt-4 text-center">
+                    This card is property of NeoBank. If found, please return to nearest branch.
+                  </Text>
+                </View>
+              </Animated.View>
+            </Animated.View>
+          </TouchableOpacity>
+        </Animated.View>
+      </PanGestureHandler>
+      <Text className="text-secondary-600 dark:text-secondary-400 text-sm mt-2 text-center">
+        Tap and hold to flip • Drag to tilt
+      </Text>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    marginVertical: 24,
-  },
-  card: {
-    width: 288,
-    height: 176,
-    borderRadius: 24,
-    padding: 24,
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 32,
-  },
-  cardType: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  virtualBadge: {
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 12,
-  },
-  virtualBadgeText: {
-    color: 'white',
-    fontSize: 10,
-    fontWeight: '500',
-  },
-  cardNumber: {
-    marginBottom: 16,
-  },
-  numberText: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
-    letterSpacing: 3,
-  },
-  cardFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  label: {
-    color: 'rgba(255,255,255,0.7)',
-    fontSize: 10,
-    marginBottom: 4,
-  },
-  value: {
-    color: 'white',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-});

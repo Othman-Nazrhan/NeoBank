@@ -1,3 +1,22 @@
+// Extend types for nativewind
+declare module 'react-native' {
+  interface TouchableOpacityProps {
+    className?: string;
+  }
+  interface ViewProps {
+    className?: string;
+  }
+  interface TextProps {
+    className?: string;
+  }
+  interface ActivityIndicatorProps {
+    className?: string;
+  }
+  interface ImageProps {
+    className?: string;
+  }
+}
+
 import React, { useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
 import { useStore } from '../store';

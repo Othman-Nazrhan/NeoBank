@@ -1,12 +1,28 @@
+// Extend types for nativewind
+declare module 'react-native' {
+  interface ViewProps {
+    className?: string;
+  }
+}
+
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { VictoryPie, VictoryChart, VictoryBar, VictoryAxis } from 'victory';
+import { View, Text } from 'react-native';
+import { VictoryPie, VictoryChart, VictoryBar, VictoryAxis, VictoryLine } from 'victory';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withDelay } from 'react-native-reanimated';
 import { useStore } from '../store';
-import { getTheme } from '../utils/theme';
 
 export default function Chart() {
-  const { theme, transactions } = useStore();
-  const currentTheme = getTheme(theme);
+  const { transactions, theme } = useStore();
+
+  const pieOpacity = useSharedValue(0);
+  const barOpacity = useSharedValue(0);
+  const lineOpacity = useSharedValue(0);
+
+  React.useEffect(() => {
+    pieOpacity.value = withDelay(200, withTiming(1, { duration: 800 }));
+    barOpacity.value = withDelay(400, withTiming(1, { duration: 800 }));
+    lineOpacity.value = withDelay(600, withTiming(1, { duration: 800 }));
+  }, []);
 
   // Prepare data for pie chart (spending by category)
   const categoryData = transactions
@@ -36,77 +52,105 @@ export default function Chart() {
     y: item.income - item.expenses,
   }));
 
+  // Prepare data for line chart (balance trend)
+  const balanceTrend = [
+    { month: 'Jan', balance: 5000 },
+    { month: 'Feb', balance: 5200 },
+    { month: 'Mar', balance: 5100 },
+    { month: 'Apr', balance: 5300 },
+    { month: 'May', balance: 5400 },
+  ];
+
+  const pieAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: pieOpacity.value,
+  }));
+
+  const barAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: barOpacity.value,
+  }));
+
+  const lineAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: lineOpacity.value,
+  }));
+
+  const isDark = theme === 'dark';
+
   return (
-    <View style={[styles.frameContainer, { backgroundColor: currentTheme.card }]}>
-      <View style={styles.container}>
-        <Text
-          style={[styles.title, { color: currentTheme.text }]}
-        >
-          Spending by Category
-        </Text>
+    <View className="items-center">
+      <Text className="text-secondary-900 dark:text-secondary-100 text-lg font-bold mb-4">
+        Spending by Category
+      </Text>
+      <Animated.View style={pieAnimatedStyle}>
         <VictoryPie
           data={pieData}
-          colorScale={['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7']}
+          colorScale={isDark ? ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7'] : ['#DC2626', '#059669', '#0891B2', '#16A34A', '#CA8A04']}
           style={{
             labels: {
               fontSize: 12,
-              fill: currentTheme.text,
+              fill: isDark ? '#F1F5F9' : '#0F172A',
             },
           }}
-          width={300}
-          height={300}
+          width={280}
+          height={280}
           innerRadius={50}
+          animate={{ duration: 1000, easing: 'bounce' }}
         />
+      </Animated.View>
 
-        <Text
-          style={[styles.title, { color: currentTheme.text, marginTop: 24 }]}
-        >
-          Monthly Savings
-        </Text>
-        <VictoryChart width={300} height={200}>
+      <Text className="text-secondary-900 dark:text-secondary-100 text-lg font-bold mb-4 mt-6">
+        Monthly Savings
+      </Text>
+      <Animated.View style={barAnimatedStyle}>
+        <VictoryChart width={280} height={180} animate={{ duration: 1000 }}>
           <VictoryAxis
             style={{
-              axis: { stroke: currentTheme.border },
-              tickLabels: { fill: currentTheme.text },
+              axis: { stroke: isDark ? '#475569' : '#E2E8F0' },
+              tickLabels: { fill: isDark ? '#CBD5E1' : '#475569' },
             }}
           />
           <VictoryAxis
             dependentAxis
             style={{
-              axis: { stroke: currentTheme.border },
-              tickLabels: { fill: currentTheme.text },
+              axis: { stroke: isDark ? '#475569' : '#E2E8F0' },
+              tickLabels: { fill: isDark ? '#CBD5E1' : '#475569' },
             }}
           />
           <VictoryBar
             data={barData}
             style={{
-              data: { fill: currentTheme.primary },
+              data: { fill: isDark ? '#60A5FA' : '#3B82F6' },
             }}
           />
         </VictoryChart>
-      </View>
+      </Animated.View>
+
+      <Text className="text-secondary-900 dark:text-secondary-100 text-lg font-bold mb-4 mt-6">
+        Balance Trend
+      </Text>
+      <Animated.View style={lineAnimatedStyle}>
+        <VictoryChart width={280} height={180} animate={{ duration: 1000 }}>
+          <VictoryAxis
+            style={{
+              axis: { stroke: isDark ? '#475569' : '#E2E8F0' },
+              tickLabels: { fill: isDark ? '#CBD5E1' : '#475569' },
+            }}
+          />
+          <VictoryAxis
+            dependentAxis
+            style={{
+              axis: { stroke: isDark ? '#475569' : '#E2E8F0' },
+              tickLabels: { fill: isDark ? '#CBD5E1' : '#475569' },
+            }}
+          />
+          <VictoryLine
+            data={balanceTrend}
+            style={{
+              data: { stroke: isDark ? '#10B981' : '#059669', strokeWidth: 3 },
+            }}
+            interpolation="natural"
+          />
+        </VictoryChart>
+      </Animated.View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  frameContainer: {
-    borderRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 5,
-    margin: 8,
-    overflow: 'hidden',
-  },
-  container: {
-    alignItems: 'center',
-    padding: 24,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 12,
-  },
-});
