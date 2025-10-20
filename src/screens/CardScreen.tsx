@@ -4,11 +4,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { CreditCard, Eye, EyeOff } from 'lucide-react-native';
+import { theme } from '../theme';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
+    padding: theme.spacing.xl,
   },
   centerContainer: {
     flex: 1,
@@ -22,25 +23,21 @@ const styles = StyleSheet.create({
   gradient: {
     width: '100%',
     height: '100%',
-    borderRadius: 24,
-    padding: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
+    borderRadius: theme.borderRadius['3xl'],
+    padding: theme.spacing.xl,
+    ...theme.shadows.lg,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 32,
+    marginBottom: theme.spacing['2xl'],
   },
   cardNumber: {
-    color: 'white',
-    fontSize: 18,
+    color: theme.colors.white,
+    fontSize: theme.typography.fontSize.lg,
     fontFamily: 'monospace',
-    marginBottom: 8,
+    marginBottom: theme.spacing.sm,
   },
   detailsRow: {
     flexDirection: 'row',
@@ -49,18 +46,18 @@ const styles = StyleSheet.create({
   detailSection: {},
   label: {
     color: '#D1D5DB',
-    fontSize: 12,
+    fontSize: theme.typography.fontSize.xs,
     textTransform: 'uppercase',
   },
   value: {
-    color: 'white',
-    fontSize: 14,
+    color: theme.colors.white,
+    fontSize: theme.typography.fontSize.sm,
   },
   instruction: {
-    color: 'white',
+    color: theme.colors.white,
     textAlign: 'center',
-    marginTop: 32,
-    fontSize: 18,
+    marginTop: theme.spacing['2xl'],
+    fontSize: theme.typography.fontSize.lg,
   },
 });
 
@@ -92,7 +89,7 @@ export default function CardScreen() {
   };
 
   return (
-    <LinearGradient colors={['#0B132B', '#1E293B']} style={styles.container}>
+    <LinearGradient colors={theme.gradients.background as [string, string]} style={styles.container}>
       <View style={styles.centerContainer}>
         <GestureDetector gesture={gesture}>
           <Animated.View style={[styles.card, animatedStyle]}>

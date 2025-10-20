@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, ScrollView, SafeAreaView, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { theme } from '../theme';
 
 const spendingData = [
   { month: 'Jan', amount: 1200 },
@@ -29,43 +30,34 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 24,
+    paddingHorizontal: theme.spacing.xl,
+    paddingTop: theme.spacing.xl,
   },
   title: {
-    fontSize: 24,
+    fontSize: theme.typography.fontSize['2xl'],
     fontWeight: 'bold',
-    color: 'white',
-    marginBottom: 24,
+    color: theme.colors.white,
+    marginBottom: theme.spacing.xl,
   },
-  chartCard: {
-    backgroundColor: 'rgba(31, 41, 55, 0.5)',
-    borderRadius: 16,
-    padding: 24,
-    marginBottom: 24,
-  },
+  chartCard: theme.commonStyles.card,
   chartTitle: {
-    fontSize: 18,
+    fontSize: theme.typography.fontSize.lg,
     fontWeight: '600',
-    color: 'white',
-    marginBottom: 16,
+    color: theme.colors.white,
+    marginBottom: theme.spacing.lg,
   },
-  categoriesCard: {
-    backgroundColor: 'rgba(31, 41, 55, 0.5)',
-    borderRadius: 16,
-    padding: 24,
-  },
+  categoriesCard: theme.commonStyles.card,
   categoriesTitle: {
-    fontSize: 18,
+    fontSize: theme.typography.fontSize.lg,
     fontWeight: '600',
-    color: 'white',
-    marginBottom: 16,
+    color: theme.colors.white,
+    marginBottom: theme.spacing.lg,
   },
   categoryRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 12,
+    paddingVertical: theme.spacing.lg,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(148, 163, 184, 0.5)',
   },
@@ -76,16 +68,16 @@ const styles = StyleSheet.create({
   categoryColor: {
     width: 16,
     height: 16,
-    borderRadius: 8,
-    marginRight: 12,
+    borderRadius: theme.borderRadius.lg,
+    marginRight: theme.spacing.lg,
   },
   categoryName: {
-    color: 'white',
-    fontSize: 16,
+    color: theme.colors.white,
+    fontSize: theme.typography.fontSize.base,
   },
   categoryAmount: {
-    color: 'white',
-    fontSize: 16,
+    color: theme.colors.white,
+    fontSize: theme.typography.fontSize.base,
     fontWeight: '600',
   },
 });
@@ -101,7 +93,7 @@ export default function Analytics() {
   }));
 
   return (
-    <LinearGradient colors={['#0B132B', '#1E293B']} style={styles.container}>
+    <LinearGradient colors={theme.gradients.background as [string, string]} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <ScrollView style={styles.scrollView}>
           <Text style={styles.title}>Analytics</Text>

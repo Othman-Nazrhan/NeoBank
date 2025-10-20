@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { ArrowUpRight, ArrowDownLeft, Coffee, Car, ShoppingBag, Home, Gamepad2 } from 'lucide-react-native';
+import { theme } from '../theme';
 
 interface Transaction {
   id: string;
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 16,
+    paddingVertical: theme.spacing.lg,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(148, 163, 184, 0.5)',
   },
@@ -33,37 +34,37 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     backgroundColor: '#1F2937',
-    borderRadius: 20,
+    borderRadius: theme.borderRadius.xl,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 16,
+    marginRight: theme.spacing.lg,
   },
   textContainer: {
     flex: 1,
   },
   description: {
-    color: 'white',
-    fontSize: 16,
+    color: theme.colors.white,
+    fontSize: theme.typography.fontSize.base,
     fontWeight: '500',
   },
   date: {
-    color: '#9CA3AF',
-    fontSize: 14,
+    color: theme.colors.text.secondary,
+    fontSize: theme.typography.fontSize.sm,
   },
   rightContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   amount: {
-    fontSize: 16,
+    fontSize: theme.typography.fontSize.base,
     fontWeight: '600',
-    marginRight: 8,
+    marginRight: theme.spacing.sm,
   },
   creditAmount: {
-    color: '#10B981',
+    color: theme.colors.accent.success,
   },
   debitAmount: {
-    color: 'white',
+    color: theme.colors.white,
   },
 });
 

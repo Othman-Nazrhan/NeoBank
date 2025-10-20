@@ -18,6 +18,12 @@ export const theme = {
       error: '#EF4444',
       warning: '#F59E0B',
     },
+    white: '#FFFFFF',
+    black: '#000000',
+  },
+  gradients: {
+    primary: ['#3A86FF', '#1E293B'],
+    background: ['#0B132B', '#1E293B'],
   },
   typography: {
     fontFamily: {
@@ -79,6 +85,26 @@ export const theme = {
       shadowOpacity: 0.3,
       shadowRadius: 8,
       elevation: 8,
+    },
+  },
+  commonStyles: {
+    card: {
+      backgroundColor: 'rgba(31, 41, 55, 0.5)',
+      borderRadius: 16,
+      padding: 24,
+      marginBottom: 24,
+    },
+    input: {
+      backgroundColor: 'rgba(31, 41, 55, 0.5)',
+      borderRadius: 24,
+      paddingHorizontal: 16,
+      paddingVertical: 8,
+    },
+    button: {
+      backgroundColor: '#3A86FF',
+      borderRadius: 20,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
   },
 };

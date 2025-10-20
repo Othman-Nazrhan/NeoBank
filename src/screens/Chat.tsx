@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, SafeAreaView, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Send, Bot } from 'lucide-react-native';
+import { theme } from '../theme';
 
 const mockResponses = [
   "Hello! I'm your AI financial assistant. How can I help you today?",
@@ -20,21 +21,21 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: 24,
+    paddingHorizontal: theme.spacing.xl,
   },
   title: {
-    fontSize: 24,
+    fontSize: theme.typography.fontSize['2xl'],
     fontWeight: 'bold',
-    color: 'white',
-    marginBottom: 24,
+    color: theme.colors.white,
+    marginBottom: theme.spacing.xl,
   },
   scrollView: {
     flex: 1,
-    marginBottom: 16,
+    marginBottom: theme.spacing.lg,
   },
   messageRow: {
     flexDirection: 'row',
-    marginBottom: 16,
+    marginBottom: theme.spacing.lg,
   },
   botMessageRow: {
     justifyContent: 'flex-start',
@@ -45,52 +46,52 @@ const styles = StyleSheet.create({
   botAvatar: {
     width: 32,
     height: 32,
-    backgroundColor: '#3A86FF',
-    borderRadius: 16,
+    backgroundColor: theme.colors.primary,
+    borderRadius: theme.borderRadius.xl,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
+    marginRight: theme.spacing.lg,
   },
   messageBubble: {
     maxWidth: 280,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 16,
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.lg,
+    borderRadius: theme.borderRadius.lg,
   },
   botMessageBubble: {
     backgroundColor: 'rgba(31, 41, 55, 0.5)',
     borderTopLeftRadius: 4,
   },
   userMessageBubble: {
-    backgroundColor: '#3A86FF',
+    backgroundColor: theme.colors.primary,
     borderTopRightRadius: 4,
   },
   messageText: {
-    color: 'white',
-    fontSize: 16,
+    color: theme.colors.white,
+    fontSize: theme.typography.fontSize.base,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'rgba(31, 41, 55, 0.5)',
-    borderRadius: 24,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    marginBottom: 24,
+    borderRadius: theme.borderRadius['3xl'],
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.sm,
+    marginBottom: theme.spacing.xl,
   },
   textInput: {
     flex: 1,
-    color: 'white',
-    fontSize: 16,
+    color: theme.colors.white,
+    fontSize: theme.typography.fontSize.base,
   },
   sendButton: {
     width: 40,
     height: 40,
-    backgroundColor: '#3A86FF',
-    borderRadius: 20,
+    backgroundColor: theme.colors.primary,
+    borderRadius: theme.borderRadius.xl,
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 8,
+    marginLeft: theme.spacing.sm,
   },
 });
 
@@ -123,7 +124,7 @@ export default function Chat() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
-      <LinearGradient colors={['#0B132B', '#1E293B']} style={styles.container}>
+      <LinearGradient colors={theme.gradients.background as [string, string]} style={styles.container}>
         <SafeAreaView style={styles.safeArea}>
           <View style={styles.content}>
             <Text style={styles.title}>AI Assistant</Text>

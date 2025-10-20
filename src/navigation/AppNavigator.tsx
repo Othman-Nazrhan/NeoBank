@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { BlurView } from 'expo-blur';
 import { View, StyleSheet } from 'react-native';
 import { Home, CreditCard, BarChart3, MessageCircle } from 'lucide-react-native';
+import { theme } from '../theme';
 
 // Screens
 import Dashboard from '../screens/Dashboard';
@@ -18,12 +19,12 @@ const Tab = createBottomTabNavigator();
 const styles = StyleSheet.create({
   tabBarStyle: {
     position: 'absolute',
-    bottom: 20,
-    left: 20,
-    right: 20,
+    bottom: theme.spacing.xl,
+    left: theme.spacing.xl,
+    right: theme.spacing.xl,
     elevation: 0,
     backgroundColor: 'transparent',
-    borderRadius: 20,
+    borderRadius: theme.borderRadius.xl,
     height: 70,
     borderTopWidth: 0,
   },
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    borderRadius: 20,
+    borderRadius: theme.borderRadius.xl,
   },
 });
 
@@ -50,7 +51,7 @@ function TabNavigator() {
             style={styles.blurView}
           />
         ),
-        tabBarActiveTintColor: '#3A86FF',
+        tabBarActiveTintColor: theme.colors.primary,
         tabBarInactiveTintColor: '#94A3B8',
       }}
     >

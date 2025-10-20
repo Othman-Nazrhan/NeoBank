@@ -5,6 +5,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import BalanceCard from '../components/BalanceCard';
 import TransactionListItem from '../components/TransactionListItem';
 import { useStore } from '../store/useStore';
+import { theme } from '../theme';
 
 const styles = StyleSheet.create({
   gradient: {
@@ -15,80 +16,75 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 24,
+    paddingHorizontal: theme.spacing.xl,
+    paddingTop: theme.spacing.xl,
   },
   greeting: {
-    fontSize: 24,
+    fontSize: theme.typography.fontSize['2xl'],
     fontWeight: 'bold',
-    color: 'white',
-    marginBottom: 24,
+    color: theme.colors.white,
+    marginBottom: theme.spacing.xl,
   },
-  spendingCard: {
-    backgroundColor: 'rgba(31, 41, 55, 0.5)',
-    borderRadius: 16,
-    padding: 24,
-    marginTop: 24,
-  },
+  spendingCard: theme.commonStyles.card,
   spendingTitle: {
-    fontSize: 18,
+    fontSize: theme.typography.fontSize.lg,
     fontWeight: '600',
-    color: 'white',
-    marginBottom: 16,
+    color: theme.colors.white,
+    marginBottom: theme.spacing.lg,
   },
   progressRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: theme.spacing.sm,
   },
   progressLabel: {
-    fontSize: 14,
-    color: '#9CA3AF',
+    fontSize: theme.typography.fontSize.sm,
+    color: theme.colors.text.secondary,
   },
   progressValue: {
-    fontSize: 14,
-    color: 'white',
+    fontSize: theme.typography.fontSize.sm,
+    color: theme.colors.white,
     marginLeft: 'auto',
   },
   progressBar: {
     height: 8,
     backgroundColor: '#374151',
-    borderRadius: 4,
+    borderRadius: theme.borderRadius.sm,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#3A86FF',
-    borderRadius: 4,
+    backgroundColor: theme.colors.primary,
+    borderRadius: theme.borderRadius.sm,
   },
   progressText: {
-    fontSize: 12,
-    color: '#9CA3AF',
-    marginTop: 8,
+    fontSize: theme.typography.fontSize.xs,
+    color: theme.colors.text.secondary,
+    marginTop: theme.spacing.sm,
   },
   insightCard: {
-    borderRadius: 16,
-    padding: 24,
-    marginTop: 24,
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.xl,
+    marginTop: theme.spacing.xl,
   },
   insightTitle: {
-    fontSize: 18,
+    fontSize: theme.typography.fontSize.lg,
     fontWeight: '600',
-    color: 'white',
-    marginBottom: 8,
+    color: theme.colors.white,
+    marginBottom: theme.spacing.sm,
   },
   insightText: {
-    fontSize: 14,
+    fontSize: theme.typography.fontSize.sm,
     color: '#D1D5DB',
   },
   transactionsSection: {
-    marginTop: 24,
+    marginTop: theme.spacing.xl,
   },
   transactionsTitle: {
-    fontSize: 18,
+    fontSize: theme.typography.fontSize.lg,
     fontWeight: '600',
-    color: 'white',
-    marginBottom: 16,
+    color: theme.colors.white,
+    marginBottom: theme.spacing.lg,
   },
 });
 
@@ -114,7 +110,7 @@ export default function Dashboard() {
   ];
 
   return (
-    <LinearGradient colors={['#0B132B', '#1E293B']} style={styles.gradient}>
+    <LinearGradient colors={theme.gradients.background as [string, string]} style={styles.gradient}>
       <SafeAreaView style={styles.safeArea}>
         <ScrollView style={styles.scrollView}>
           {/* Greeting */}

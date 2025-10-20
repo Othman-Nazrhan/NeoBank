@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
+import { theme } from '../theme';
 
 interface BalanceCardProps {
   balance: number;
@@ -9,38 +10,34 @@ interface BalanceCardProps {
 
 const styles = StyleSheet.create({
   gradient: {
-    borderRadius: 24,
-    padding: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
+    borderRadius: theme.borderRadius['3xl'],
+    padding: theme.spacing.xl,
+    ...theme.shadows.lg,
   },
   totalBalance: {
-    color: '#94A3B8',
-    fontSize: 14,
+    color: theme.colors.text.secondary,
+    fontSize: theme.typography.fontSize.sm,
     textTransform: 'uppercase',
-    marginBottom: 8,
+    marginBottom: theme.spacing.sm,
   },
   balanceText: {
-    fontSize: 36,
+    fontSize: theme.typography.fontSize['4xl'],
     fontWeight: 'bold',
-    color: 'white',
-    marginBottom: 16,
+    color: theme.colors.white,
+    marginBottom: theme.spacing.lg,
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   label: {
-    color: '#94A3B8',
-    fontSize: 12,
+    color: theme.colors.text.secondary,
+    fontSize: theme.typography.fontSize.xs,
     textTransform: 'uppercase',
   },
   value: {
-    color: 'white',
-    fontSize: 18,
+    color: theme.colors.white,
+    fontSize: theme.typography.fontSize.lg,
   },
 });
 
@@ -71,7 +68,7 @@ export default function BalanceCard({ balance }: BalanceCardProps) {
 
   return (
     <LinearGradient
-      colors={['#3A86FF', '#1E293B']}
+      colors={theme.gradients.primary as [string, string]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={styles.gradient}
