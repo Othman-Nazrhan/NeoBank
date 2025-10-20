@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, SafeAreaView, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, SafeAreaView, KeyboardAvoidingView, Platform, StyleSheet, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Send, Bot } from 'lucide-react-native';
 import { theme } from '../theme';
+import { useStore } from '../store/useStore';
 
 const mockResponses = [
   "Hello! I'm your AI financial assistant. How can I help you today?",
@@ -96,26 +97,39 @@ const styles = StyleSheet.create({
 });
 
 export default function Chat() {
+  const { aiResponse, isLoadingAI, aiError, fetchAIResponse } = useStore();
   const [messages, setMessages] = useState([
     { id: 1, text: "Hello! I'm your AI financial assistant. How can I help you today?", isBot: true },
   ]);
   const [inputText, setInputText] = useState('');
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (inputText.trim()) {
       const newMessage = { id: messages.length + 1, text: inputText, isBot: false };
       setMessages([...messages, newMessage]);
+      const userMessage = inputText;
       setInputText('');
 
-      // Simulate bot response
-      setTimeout(() => {
+      // Fetch AI response
+      await fetchAIResponse(userMessage);
+      if (aiResponse) {
         const botResponse = {
           id: messages.length + 2,
-          text: mockResponses[Math.floor(Math.random() * mockResponses.length)],
+          text: aiResponse.message,
           isBot: true,
         };
         setMessages(prev => [...prev, botResponse]);
-      }, 1000);
+      } else {
+        // Fallback to mock response if API fails
+        setTimeout(() => {
+          const botResponse = {
+            id: messages.length + 2,
+            text: mockResponses[Math.floor(Math.random() * mockResponses.length)],
+            isBot: true,
+          };
+          setMessages(prev => [...prev, botResponse]);
+        }, 1000);
+      }
     }
   };
 

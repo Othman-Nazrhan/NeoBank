@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Text, ScrollView, SafeAreaView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, SafeAreaView, StyleSheet, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { theme } from '../theme';
+import { useStore } from '../store/useStore';
+
 
 const spendingData = [
   { month: 'Jan', amount: 1200 },
@@ -80,9 +82,49 @@ const styles = StyleSheet.create({
     fontSize: theme.typography.fontSize.base,
     fontWeight: '600',
   },
+  stockCard: theme.commonStyles.card,
+  stockTitle: {
+    fontSize: theme.typography.fontSize.lg,
+    fontWeight: '600',
+    color: theme.colors.white,
+    marginBottom: theme.spacing.lg,
+  },
+  stockRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: theme.spacing.lg,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(148, 163, 184, 0.5)',
+  },
+  stockSymbol: {
+    color: theme.colors.white,
+    fontSize: theme.typography.fontSize.base,
+    fontWeight: '600',
+  },
+  stockPrice: {
+    color: theme.colors.white,
+    fontSize: theme.typography.fontSize.base,
+  },
+  stockChange: {
+    color: theme.colors.white,
+    fontSize: theme.typography.fontSize.sm,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: theme.spacing.xl,
+  },
+  errorText: {
+    color: '#FF6B6B',
+    fontSize: theme.typography.fontSize.base,
+    textAlign: 'center',
+  },
 });
 
 export default function Analytics() {
+
   const chartOpacity = useSharedValue(0);
   React.useEffect(() => {
     chartOpacity.value = withTiming(1, { duration: 1000 });
@@ -123,6 +165,10 @@ export default function Analytics() {
               </View>
             ))}
           </View>
+
+
+
+
         </ScrollView>
       </SafeAreaView>
     </LinearGradient>

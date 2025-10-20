@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, ScrollView, SafeAreaView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, SafeAreaView, StyleSheet, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { DollarSign } from 'lucide-react-native';
 import BalanceCard from '../components/BalanceCard';
 import TransactionListItem from '../components/TransactionListItem';
+import { useNavigation } from '@react-navigation/native';
 import { useStore } from '../store/useStore';
 import { theme } from '../theme';
 
@@ -62,21 +64,7 @@ const styles = StyleSheet.create({
     color: theme.colors.text.secondary,
     marginTop: theme.spacing.sm,
   },
-  insightCard: {
-    borderRadius: theme.borderRadius.lg,
-    padding: theme.spacing.xl,
-    marginTop: theme.spacing.xl,
-  },
-  insightTitle: {
-    fontSize: theme.typography.fontSize.lg,
-    fontWeight: '600',
-    color: theme.colors.white,
-    marginBottom: theme.spacing.sm,
-  },
-  insightText: {
-    fontSize: theme.typography.fontSize.sm,
-    color: '#D1D5DB',
-  },
+
   transactionsSection: {
     marginTop: theme.spacing.xl,
   },
@@ -86,9 +74,24 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
     marginBottom: theme.spacing.lg,
   },
+  converterButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(58, 134, 255, 0.2)',
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.lg,
+    marginTop: theme.spacing.xl,
+  },
+  converterButtonText: {
+    fontSize: theme.typography.fontSize.lg,
+    fontWeight: '600',
+    color: theme.colors.white,
+    marginLeft: theme.spacing.md,
+  },
 });
 
 export default function Dashboard() {
+  const navigation = useNavigation();
   const { balance, transactions } = useStore();
 
   const progressValue = useSharedValue(0);
@@ -132,16 +135,16 @@ export default function Dashboard() {
             <Text style={styles.progressText}>$2,250 / $3,000</Text>
           </View>
 
-          {/* AI Insight Card */}
-          <LinearGradient
-            colors={['rgba(58, 134, 255, 0.2)', 'rgba(58, 134, 255, 0.1)']}
-            style={styles.insightCard}
+
+
+          {/* Currency Converter Button */}
+          <TouchableOpacity
+            style={styles.converterButton}
+            onPress={() => navigation.navigate('Currency')}
           >
-            <Text style={styles.insightTitle}>AI Insight</Text>
-            <Text style={styles.insightText}>
-              Your spending on dining is 20% higher this month. Consider setting a budget to save more.
-            </Text>
-          </LinearGradient>
+            <DollarSign size={24} color={theme.colors.white} />
+            <Text style={styles.converterButtonText}>Currency Converter</Text>
+          </TouchableOpacity>
 
           {/* Recent Transactions */}
           <View style={styles.transactionsSection}>

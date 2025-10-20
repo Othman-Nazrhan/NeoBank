@@ -107,4 +107,9 @@ export const theme = {
       justifyContent: 'center',
     },
   },
+  api: {
+    loadingColor: '#3A86FF',
+    errorColor: '#EF4444',
+    successColor: '#10B981',
+  },
 };

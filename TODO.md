@@ -1,30 +1,15 @@
-# Refactoring Plan: Centralize Styling with Theme Constants
+# API Integration Plan for NeoBank App
 
-## Information Gathered
-- theme.ts has basic color, typography, spacing, borderRadius, and shadow definitions, but components use hardcoded values.
-- Hardcoded colors (e.g., '#3A86FF', '#94A3B8'), gradients, and styles are scattered across components and screens.
-- This causes inconsistencies and maintenance issues.
-
-## Plan
-- [x] **src/theme.ts**: Add new constants for gradients, common card styles, and reusable styles.
-- [x] **src/components/BalanceCard.tsx**: Replace hardcoded colors and styles with theme constants.
-- [x] **src/components/TransactionListItem.tsx**: Replace hardcoded colors and styles with theme constants.
-- [x] **src/screens/Dashboard.tsx**: Update to use theme for colors, spacing, etc.
-- [x] **src/screens/CardScreen.tsx**: Replace hardcoded styles with theme constants.
-- [x] **src/screens/Analytics.tsx**: Replace hardcoded styles with theme constants.
-- [x] **src/screens/Chat.tsx**: Replace hardcoded styles with theme constants.
-- [x] **src/navigation/AppNavigator.tsx**: Update tab bar styles to use theme constants.
-
-## Dependent Files to be Edited
-- theme.ts
-- BalanceCard.tsx
-- TransactionListItem.tsx
-- Dashboard.tsx
-- CardScreen.tsx
-- Analytics.tsx
-- Chat.tsx
-- AppNavigator.tsx
-
-## Followup Steps
-- [x] Run TypeScript check (`npx tsc --noEmit`) to ensure no errors.
-- [x] Test app functionality and styling to verify changes.
+## Steps to Complete
+- [x] Install expo-secure-store for API key management.
+- [x] Update src/store/useStore.ts: Add interfaces and states for currency rates, crypto data, banking data, AI responses, payment data. Add fetch functions for ExchangeRate.host, CoinGecko, Open Bank Project, OpenAI, Stripe Test API.
+- [x] Create src/components/CurrencyConverter.tsx: UI component for currency conversion.
+- [x] Create src/components/CryptoList.tsx: UI component for displaying crypto data.
+- [x] Update src/screens/Dashboard.tsx: Add CurrencyConverter component.
+- [x] Update src/screens/Analytics.tsx: Add CryptoList component.
+- [x] Update src/screens/Chat.tsx: Integrate OpenAI API for AI chat responses.
+- [x] Update src/screens/CardScreen.tsx: Add payment simulation using Stripe Test API.
+- [x] Update src/theme.ts: Add any new styles if needed.
+- [x] Test all API integrations in the app.
+- [x] Handle edge cases: API errors, rate limits, loading states.
+- [x] Obtain and store API keys securely.

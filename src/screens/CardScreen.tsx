@@ -1,10 +1,11 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { CreditCard, Eye, EyeOff } from 'lucide-react-native';
 import { theme } from '../theme';
+import { useStore } from '../store/useStore';
 
 const styles = StyleSheet.create({
   container: {
@@ -62,6 +63,7 @@ const styles = StyleSheet.create({
 });
 
 export default function CardScreen() {
+  const { paymentData, isLoadingPayment, paymentError, fetchPaymentData } = useStore();
   const [showCardNumber, setShowCardNumber] = React.useState(false);
   const rotateX = useSharedValue(0);
   const rotateY = useSharedValue(0);
@@ -86,6 +88,15 @@ export default function CardScreen() {
 
   const toggleCardNumber = () => {
     setShowCardNumber(!showCardNumber);
+  };
+
+  const simulatePayment = async () => {
+    await fetchPaymentData();
+    if (paymentData && paymentData.length > 0) {
+      Alert.alert('Payment Simulated', `Payment of $${paymentData[0].amount} processed successfully!`);
+    } else {
+      Alert.alert('Payment Simulation', 'No payment data available. Please check your API key.');
+    }
   };
 
   return (
@@ -127,6 +138,28 @@ export default function CardScreen() {
         <Text style={styles.instruction}>
           Tap and drag to tilt the card
         </Text>
+
+        <TouchableOpacity
+          style={{
+            backgroundColor: theme.colors.primary,
+            paddingVertical: theme.spacing.lg,
+            paddingHorizontal: theme.spacing.xl,
+            borderRadius: theme.borderRadius.lg,
+            marginTop: theme.spacing.xl,
+          }}
+          onPress={simulatePayment}
+          disabled={isLoadingPayment}
+        >
+          {isLoadingPayment ? (
+            <ActivityIndicator color={theme.colors.white} />
+          ) : (
+            <Text style={{ color: theme.colors.white, fontSize: theme.typography.fontSize.base, fontWeight: '600' }}>
+              Simulate Payment
+            </Text>
+          )}
+        </TouchableOpacity>
+
+        {paymentError && <Text style={{ color: '#FF6B6B', textAlign: 'center', marginTop: theme.spacing.lg }}>{paymentError}</Text>}
       </View>
     </LinearGradient>
   );

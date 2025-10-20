@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { BlurView } from 'expo-blur';
 import { View, StyleSheet } from 'react-native';
-import { Home, CreditCard, BarChart3, MessageCircle } from 'lucide-react-native';
+import { Home, CreditCard, BarChart3, MessageCircle, TrendingUp } from 'lucide-react-native';
 import { theme } from '../theme';
 
 // Screens
@@ -12,6 +12,9 @@ import Dashboard from '../screens/Dashboard';
 import CardScreen from '../screens/CardScreen';
 import Analytics from '../screens/Analytics';
 import Chat from '../screens/Chat';
+import CryptoScreen from '../screens/CryptoScreen';
+import CurrencyScreen from '../screens/CurrencyScreen';
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -83,6 +86,15 @@ function TabNavigator() {
         }}
       />
       <Tab.Screen
+        name="Crypto"
+        component={CryptoScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <TrendingUp size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
         name="Chat"
         component={Chat}
         options={{
@@ -91,6 +103,7 @@ function TabNavigator() {
           ),
         }}
       />
+
     </Tab.Navigator>
   );
 }
@@ -100,6 +113,7 @@ export default function AppNavigator() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="MainTabs" component={TabNavigator} />
+        <Stack.Screen name="Currency" component={CurrencyScreen} options={{ presentation: 'modal' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
