@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { ArrowUpRight, ArrowDownLeft, Coffee, Car, ShoppingBag, Home, Gamepad2 } from 'lucide-react-native';
+import { ArrowUpRight, ArrowDownLeft, Coffee, Car, ShoppingBag, Home, Gamepad2, Heart } from 'lucide-react-native';
 import { theme } from '../theme';
 
 interface Transaction {
@@ -82,6 +82,9 @@ const getCategoryIcon = (category: string) => {
       return <Home size={20} color="#94A3B8" />;
     case 'entertainment':
       return <Gamepad2 size={20} color="#94A3B8" />;
+    case 'health':
+    case 'medical':
+      return <Heart size={20} color="#94A3B8" />;
     default:
       return <ArrowUpRight size={20} color="#94A3B8" />;
   }

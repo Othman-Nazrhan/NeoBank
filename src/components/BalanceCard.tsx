@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { theme } from '../theme';
+import { formatCurrency } from '../utils/formatNumber';
 
 interface BalanceCardProps {
   balance: number;
+  pending?: number;
 }
 
 const styles = StyleSheet.create({
@@ -41,30 +43,18 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function BalanceCard({ balance }: BalanceCardProps) {
-  const [displayBalance, setDisplayBalance] = React.useState(0);
+export default function BalanceCard({ balance, pending = 0 }: BalanceCardProps) {
+  const animatedBalance = useSharedValue(balance);
 
-  React.useEffect(() => {
-    const startValue = 0;
-    const endValue = balance;
-    const duration = 1500;
-    const steps = 60; // 60 FPS
-    const increment = (endValue - startValue) / steps;
-    const stepDuration = duration / steps;
+  useEffect(() => {
+    animatedBalance.value = withTiming(balance, { duration: 1500 });
+  }, [balance, animatedBalance]);
 
-    let currentValue = startValue;
-    const interval = setInterval(() => {
-      currentValue += increment;
-      if (currentValue >= endValue) {
-        setDisplayBalance(endValue);
-        clearInterval(interval);
-      } else {
-        setDisplayBalance(currentValue);
-      }
-    }, stepDuration);
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: 1, // Placeholder for potential future use
+  }));
 
-    return () => clearInterval(interval);
-  }, [balance]);
+  const displayBalance = animatedBalance.value;
 
   return (
     <LinearGradient
@@ -74,15 +64,17 @@ export default function BalanceCard({ balance }: BalanceCardProps) {
       style={styles.gradient}
     >
       <Text style={styles.totalBalance}>Total Balance</Text>
-      <Text style={styles.balanceText}>${displayBalance.toFixed(2)}</Text>
+      <Text style={styles.balanceText}>
+        {formatCurrency(displayBalance)}
+      </Text>
       <View style={styles.row}>
         <View>
           <Text style={styles.label}>Available</Text>
-          <Text style={styles.value}>${balance.toFixed(2)}</Text>
+          <Text style={styles.value}>{formatCurrency(balance - pending)}</Text>
         </View>
         <View>
           <Text style={styles.label}>Pending</Text>
-          <Text style={styles.value}>$0.00</Text>
+          <Text style={styles.value}>{formatCurrency(pending)}</Text>
         </View>
       </View>
     </LinearGradient>

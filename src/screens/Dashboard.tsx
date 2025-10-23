@@ -27,7 +27,10 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
     marginBottom: theme.spacing.xl,
   },
-  spendingCard: theme.commonStyles.card,
+  spendingCard: {
+    ...theme.commonStyles.card,
+    marginTop: theme.spacing.xl,
+  },
   spendingTitle: {
     fontSize: theme.typography.fontSize.lg,
     fontWeight: '600',
