@@ -101,6 +101,28 @@ NeoBank/
     └── card-bg.png            # Card background placeholder
 ```
 
+## Screens
+
+### Dashboard
+The main dashboard provides users with a comprehensive overview of their banking information, including account balance, recent transactions, and key financial metrics. Features smooth animations and interactive elements.
+
+**Mockup**: ![Dashboard](https://via.placeholder.com/500x1000?text=Dashboard+Screen)
+
+### Card Management
+This screen allows users to manage their virtual and physical cards with 3D tilt effects. Users can view card details, enable/disable cards, and monitor transaction history for each card.
+
+**Mockup**: ![Card Management](https://via.placeholder.com/500x1000?text=Card+Management+Screen)
+
+### Analytics
+The analytics screen presents detailed financial insights through interactive charts and graphs powered by Victory Native. Users can track spending patterns, income sources, and budget adherence over customizable time periods.
+
+**Mockup**: ![Analytics](https://via.placeholder.com/500x1000?text=Analytics+Screen)
+
+### AI Chat Assistant
+An intelligent chat interface that provides personalized financial advice and answers to user queries. The AI assistant helps with transaction inquiries, budget recommendations, and general banking support.
+
+**Mockup**: ![AI Chat](https://via.placeholder.com/500x1000?text=AI+Chat+Assistant+Screen)
+
 ## API Integration
 
 This app uses mock data for demonstration. To integrate with real APIs:
@@ -174,3 +196,17 @@ This project is licensed under the MIT License.
 ## Support
 
 For questions or issues, please open an issue on GitHub or contact the development team.
+
+## Screens
+### Dashboard
+The main dashboard provides users with a comprehensive overview of their banking information, including account balance, recent transactions, and key financial metrics. Features smooth animations and interactive elements.
+**Mockup**: ![Dashboard](https://via.placeholder.com/500x1000?text=Dashboard+Screen)
+### Card Management
+This screen allows users to manage their virtual and physical cards with 3D tilt effects. Users can view card details, enable/disable cards, and monitor transaction history for each card.
+**Mockup**: ![Card Management](https://via.placeholder.com/500x1000?text=Card+Management+Screen)
+### Analytics
+The analytics screen presents detailed financial insights through interactive charts and graphs powered by Victory Native. Users can track spending patterns, income sources, and budget adherence over customizable time periods.
+**Mockup**: ![Analytics](https://via.placeholder.com/500x1000?text=Analytics+Screen)
+### AI Chat Assistant
+An intelligent chat interface that provides personalized financial advice and answers to user queries. The AI assistant helps with transaction inquiries, budget recommendations, and general banking support.
+**Mockup**: ![AI Chat](https://via.placeholder.com/500x1000?text=AI+Chat+Assistant+Screen)
